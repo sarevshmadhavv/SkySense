@@ -7,7 +7,6 @@ import requests
 import math
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
-from branca.element import Template, MacroElement
 
 # 🌐 App config
 st.set_page_config(page_title="SkySense AI", layout="centered")
@@ -143,7 +142,6 @@ for _, row in nearby_fires.iterrows():
     ).add_to(m)
 
 legend_html = """
-{% macro html() %}
 <div style='
     position: fixed;
     bottom: 40px;
@@ -160,12 +158,9 @@ legend_html = """
 <span style='color:red;'>●</span> Fire blowing toward you<br>
 <span style='color:gray;'>●</span> Fire not affecting you
 </div>
-{% endmacro %}
 """
 
-legend = MacroElement()
-legend._template = Template(legend_html)
-m.get_root().add_child(legend)
+m.get_root().html.add_child(folium.Element(legend_html))
 
 st.markdown("""
 ### 🔥 Legend
