@@ -163,12 +163,12 @@ legend_html = """
 """
 
 m.get_root().html.add_child(folium.Element(legend_html))
-
 st.markdown("""
 ### 🔥 Legend
 - 🔴 Red dot → fire blowing toward you
 - ⚪ Gray dot → fire not affecting you
 """)
+m = folium.Map(location=user_coords, zoom_start=7)
 
 folium_map_html = m._repr_html_()
 components.html(folium_map_html, height=600)
