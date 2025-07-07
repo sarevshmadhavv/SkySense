@@ -6,4 +6,5 @@ geopy
 requests
 scikit-learn
 branca
+opencage
 
