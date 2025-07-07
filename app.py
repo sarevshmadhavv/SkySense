@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import folium
-from geopy.geocoders import Nominatim
+from opencage.geocoder import OpenCageGeocode
 from geopy.distance import geodesic
 import requests
 import math
@@ -14,15 +14,16 @@ st.title("🌍 SkySense AI – Fire Smoke & AQI Risk Radar")
 
 # 📍 User input for location
 place = st.text_input("Enter your city/town/village:", "Chennai")
-geolocator = Nominatim(user_agent="skysense-app")
-location = geolocator.geocode(place)
+geocoder = OpenCageGeocode(st.secrets["92ea3570441b4d16a64e2427f53fe876"])
+results = geocoder.geocode(place)
 
-if not location:
+if not results:
     st.error("❌ Location not found. Please try again.")
     st.stop()
 
-user_coords = (location.latitude, location.longitude)
-st.success(f"📍 Found location: {location.address}")
+location = results[0]
+user_coords = (location['geometry']['lat'], location['geometry']['lng'])
+st.success(f"📍 Found location: {location['formatted']}")
 
 # 🌬️ Get wind and weather data via OpenWeatherMap
 weather_api_key = "18406bb4885186a7985d590bb3109abd"  # Replace with your real key
