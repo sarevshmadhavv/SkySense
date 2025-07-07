@@ -129,20 +129,17 @@ else:
     st.info("✅ No fire smoke reaching your location (based on wind).")
 
 # 🌍 Fire map with legend
+# ✅ Create the map before rendering it
 m = folium.Map(location=user_coords, zoom_start=7)
-folium.Marker(user_coords, tooltip="📍 You", icon=folium.Icon(color="blue")).add_to(m)
 
-for _, row in nearby_fires.iterrows():
-    color = "red" if row["wind_toward_user"] else "gray"
-    folium.CircleMarker(
-        location=(row["latitude"], row["longitude"]),
-        radius=5,
-        color=color,
-        fill=True,
-        fill_opacity=0.8,
-        popup=f"FRP: {row['frp']} | Distance: {row['distance_km']:.1f} km"
-    ).add_to(m)
+# ✅ Optional: mark your location
+folium.Marker(
+    user_coords,
+    tooltip="📍 You",
+    icon=folium.Icon(color="blue")
+).add_to(m)
 
+# ✅ Add a simple HTML legend directly
 legend_html = """
 <div style='
     position: fixed;
@@ -161,14 +158,9 @@ legend_html = """
 <span style='color:gray;'>●</span> Fire not affecting you
 </div>
 """
-
 m.get_root().html.add_child(folium.Element(legend_html))
-st.markdown("""
-### 🔥 Legend
-- 🔴 Red dot → fire blowing toward you
-- ⚪ Gray dot → fire not affecting you
-""")
-m = folium.Map(location=user_coords, zoom_start=7)
 
+# ✅ Now render the map safely
 folium_map_html = m._repr_html_()
 components.html(folium_map_html, height=600)
+
